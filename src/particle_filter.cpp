@@ -17,14 +17,12 @@ using namespace std;
 
 
 void ParticleFilter::init(double x, double y, double theta, double std[]) {
-	// TODO: Set the number of particles. Initialize all particles to first position (based on estimates of 
-	//   x, y, theta and their uncertainties from GPS) and all weights to 1. 
-	// Add random Gaussian noise to each particle.
+    std::default_random_engine gen;
 	normal_distribution<double> dist_x(x, std[0]);
 	normal_distribution<double> dist_y(y, std[1]);
 	normal_distribution<double> dist_theta(theta, std[2]);
-    std::mt19937 gen;
-	num_particles = 50;
+
+    num_particles = 50;
 	for(int i=0; i<num_particles; i++) {
 		Particle p = Particle();
 		p.id = i;
@@ -39,11 +37,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
 }
 
 void ParticleFilter::prediction(double delta_t, double std_pos[], double velocity, double yaw_rate) {
-	// TODO: Add measurements to each particle and add random Gaussian noise.
-	// NOTE: When adding noise you may find std::normal_distribution and std::default_random_engine useful.
-	//  http://en.cppreference.com/w/cpp/numeric/random/normal_distribution
-	//  http://www.cplusplus.com/reference/random/default_random_engine/
-    std::mt19937 gen;
+    std::default_random_engine gen;
 	for (Particle& p:particles) {
 		if (fabs(yaw_rate) <0.0001) {
 			p.x = p.x + velocity * delta_t * cos(p.theta);
@@ -64,6 +58,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
 	}
 }
 
+//not used in current implementation
 void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& observations) {
 	// TODO: Find the predicted measurement that is closest to each observed measurement and assign the 
 	//   observed measurement to this particular landmark.
